@@ -2,7 +2,6 @@ package net.jonuuh.ltj;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemEgg;
@@ -11,14 +10,10 @@ import net.minecraft.item.ItemFishingRod;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemSnowball;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
-
-import java.lang.reflect.Field;
 
 public class Render
 {
@@ -38,8 +33,7 @@ public class Render
             return;
         }
 
-        RenderManager renderManager = mc.getRenderManager();
-        float[] renderPos = getRenderPositions(renderManager);
+        float[] renderPos = getRenderPositions(player, event.partialTicks);
 
         boolean holdingBow = heldItem instanceof ItemBow;
         boolean hit = false;
@@ -132,34 +126,17 @@ public class Render
         return (bowPower > 3.0F || bowPower <= 0.3F) ? 3.0F : bowPower;
     }
 
-    private float[] getRenderPositions(RenderManager renderManager)
+    private float[] getRenderPositions(EntityPlayerSP player, float partialTicks)
     {
-        float[] positions = new float[3];
-        try
-        {
-            Field renderPosX = RenderManager.class.getDeclaredField("renderPosX");
-            Field renderPosY = RenderManager.class.getDeclaredField("renderPosY");
-            Field renderPosZ = RenderManager.class.getDeclaredField("renderPosZ");
-
-            renderPosX.setAccessible(true);
-            renderPosY.setAccessible(true);
-            renderPosZ.setAccessible(true);
-
-            positions[0] = ((Double) renderPosX.get(renderManager)).floatValue();
-            positions[1] = ((Double) renderPosY.get(renderManager)).floatValue();
-            positions[2] = ((Double) renderPosZ.get(renderManager)).floatValue();
-        }
-        catch (NoSuchFieldException | IllegalAccessException e)
-        {
-            e.printStackTrace();
-            mc.thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_RED + "[LTJ] Failed to access render positions"));
-        }
-        return positions;
+        return new float[]{
+                (float) (player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks),
+                (float) (player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks),
+                (float) (player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks)};
     }
 
     private void drawEndBox(float[] renderPos, Vec3 pos, boolean hit)
     {
-        AxisAlignedBB box = new AxisAlignedBB(0, 0, 0, 0.25d, 0.25d, 0.25d);
+        AxisAlignedBB box = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
         double renderX = (pos.xCoord - renderPos[0]) - (box.maxX / 2.0F);
         double renderY = (pos.yCoord - renderPos[1]) - (box.maxY / 2.0F);
         double renderZ = (pos.zCoord - renderPos[2]) - (box.maxZ / 2.0F);
