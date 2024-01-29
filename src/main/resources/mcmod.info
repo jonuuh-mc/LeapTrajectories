@@ -1,13 +1,13 @@
 [
     {
-        "modid": "examplemod",
-        "name": "Example Mod",
-        "description": "An example mod.",
+        "modid": "ltj",
+        "name": "LTJ",
+        "description": "",
         "version": "${version}",
         "mcversion": "${mcversion}",
         "url": "",
         "updateUrl": "",
-        "authorList": ["The author"],
+        "authorList": ["jonuuh"],
         "credits": "",
         "logoFile": "",
         "screenshots": [],
