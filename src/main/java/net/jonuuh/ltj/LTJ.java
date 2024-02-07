@@ -1,5 +1,6 @@
 package net.jonuuh.ltj;
 
+import net.jonuuh.ltj.event.Controller;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
@@ -11,24 +12,23 @@ import org.lwjgl.input.Keyboard;
 
 @Mod(
         modid = "ltj",
-        version = "1.0.0",
+        version = "1.1.0",
         acceptedMinecraftVersions = "[1.8.9]"
 )
 public class LTJ
 {
-    private final Minecraft mc = Minecraft.getMinecraft();
-    private final KeyBinding leapKey;
+    private static final Minecraft mc = Minecraft.getMinecraft();
+    private final KeyBinding toggleKey;
 
     public LTJ()
     {
-        this.leapKey =  new KeyBinding("LTJLeap", Keyboard.KEY_L, "LTJ");;
+        this.toggleKey =  new KeyBinding("LTJToggle", Keyboard.KEY_L, "LTJ");
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-        ClientRegistry.registerKeyBinding(leapKey);
-        MinecraftForge.EVENT_BUS.register(new Render(mc, leapKey));
-//        MinecraftForge.EVENT_BUS.register(new Misc(mc));
+        ClientRegistry.registerKeyBinding(toggleKey);
+        MinecraftForge.EVENT_BUS.register(new Controller(mc, toggleKey));
     }
 }
