@@ -1,4 +1,4 @@
-package net.jonuuh.ltj.util;
+package io.jonuuh.leaptrajectories.util;
 
 public class Color
 {

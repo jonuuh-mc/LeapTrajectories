@@ -1,8 +1,8 @@
-package net.jonuuh.ltj.event;
+package io.jonuuh.leaptrajectories.event;
 
-import net.jonuuh.ltj.Config;
-import net.jonuuh.ltj.util.Util;
-import net.jonuuh.ltj.util.Vec;
+import io.jonuuh.leaptrajectories.Config;
+import io.jonuuh.leaptrajectories.util.Util;
+import io.jonuuh.leaptrajectories.util.Vec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.item.ItemSpade;

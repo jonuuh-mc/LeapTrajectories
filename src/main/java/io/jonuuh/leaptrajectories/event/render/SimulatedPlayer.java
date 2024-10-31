@@ -1,6 +1,6 @@
-package net.jonuuh.ltj.event.render;
+package io.jonuuh.leaptrajectories.event.render;
 
-import net.jonuuh.ltj.util.Vec;
+import io.jonuuh.leaptrajectories.util.Vec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;

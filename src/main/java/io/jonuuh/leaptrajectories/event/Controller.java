@@ -1,6 +1,6 @@
-package net.jonuuh.ltj.event;
+package io.jonuuh.leaptrajectories.event;
 
-import net.jonuuh.ltj.event.render.Renderer;
+import io.jonuuh.leaptrajectories.event.render.Renderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ChatComponentText;

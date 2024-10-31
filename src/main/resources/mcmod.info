@@ -1,7 +1,7 @@
 [
     {
-        "modid": "ltj",
-        "name": "LTJ",
+        "modid": "leaptrajectories",
+        "name": "LeapTrajectories",
         "description": "",
         "version": "${version}",
         "mcversion": "${mcversion}",

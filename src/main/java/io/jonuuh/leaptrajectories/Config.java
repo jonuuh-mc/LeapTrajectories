@@ -1,6 +1,6 @@
-package net.jonuuh.ltj;
+package io.jonuuh.leaptrajectories;
 
-import net.jonuuh.ltj.util.Color;
+import io.jonuuh.leaptrajectories.util.Color;
 
 public class Config
 {

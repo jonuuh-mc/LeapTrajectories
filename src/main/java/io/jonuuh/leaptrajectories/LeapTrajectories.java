@@ -1,6 +1,6 @@
-package net.jonuuh.ltj;
+package io.jonuuh.leaptrajectories;
 
-import net.jonuuh.ltj.event.Controller;
+import io.jonuuh.leaptrajectories.event.Controller;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
@@ -10,17 +10,13 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import org.lwjgl.input.Keyboard;
 
-@Mod(
-        modid = "ltj",
-        version = "1.1.0",
-        acceptedMinecraftVersions = "[1.8.9]"
-)
-public class LTJ
+@Mod(modid = "leaptrajectories", version = "1.2.0", acceptedMinecraftVersions = "[1.8.9]")
+public class LeapTrajectories
 {
     private static final Minecraft mc = Minecraft.getMinecraft();
     private final KeyBinding toggleKey;
 
-    public LTJ()
+    public LeapTrajectories()
     {
         this.toggleKey =  new KeyBinding("LTJToggle", Keyboard.KEY_L, "LTJ");
     }

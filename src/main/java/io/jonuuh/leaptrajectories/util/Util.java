@@ -1,6 +1,6 @@
-package net.jonuuh.ltj.util;
+package io.jonuuh.leaptrajectories.util;
 
-import net.jonuuh.ltj.Config;
+import io.jonuuh.leaptrajectories.Config;
 import net.minecraft.block.Block;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
