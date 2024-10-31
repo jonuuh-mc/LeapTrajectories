@@ -53,10 +53,15 @@ public class Util
         // TODO: rotation pitch motion probably a bit off
         // TODO: x, z, and pitch numbers depend on ping (some number based on ping / 8000.0) (NetHandlerPlayClient.java line 494 handleEntityVelocity?)
         // TODO: grab player motion on leap and use as future leap motion (also for current leap trajectory? correct it midair?)
+//        return new Vec(
+//                (float) -Math.sin(Math.toRadians(player.rotationYaw)) * (player.onGround ? 1.310375F : 2.183875F),
+//                (float) Math.max(Math.sin(-Math.toRadians(player.rotationPitch)) * 1.8815F, 0.686F),
+//                (float) Math.cos(Math.toRadians(player.rotationYaw)) * (player.onGround ? 1.310375F : 2.183875F));
+
         return new Vec(
-                (float) -Math.sin(Math.toRadians(player.rotationYaw)) * (player.onGround ? 1.310375F : 2.183875F),
-                (float) Math.max(Math.sin(-Math.toRadians(player.rotationPitch)) * 1.8815F, 0.686F),
-                (float) Math.cos(Math.toRadians(player.rotationYaw)) * (player.onGround ? 1.310375F : 2.183875F));
+                (float) -Math.sin(Math.toRadians(player.rotationYaw)) * (2.4),
+                (float) Math.max(Math.sin(-Math.toRadians(player.rotationPitch)) * 2.0F, 0.78F),
+                (float) Math.cos(Math.toRadians(player.rotationYaw)) * (2.4));
     }
 
     public static BlockPos isBlockCollision(WorldClient world, AxisAlignedBB bb)
@@ -73,6 +78,29 @@ public class Util
                     BlockPos blockPos = new BlockPos(x, y, z);
 
                     if (!block.isAir(world, blockPos) && block.getSelectedBoundingBox(world, blockPos).intersectsWith(bb))
+                    {
+                        return blockPos;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static BlockPos isAirBlockCollision(WorldClient world, AxisAlignedBB bb)
+    {
+        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+
+        for (int x = MathHelper.floor_double(bb.minX); x <= MathHelper.floor_double(bb.maxX); ++x)
+        {
+            for (int y = MathHelper.floor_double(bb.minY); y <= MathHelper.floor_double(bb.maxY); ++y)
+            {
+                for (int z = MathHelper.floor_double(bb.minZ); z <= MathHelper.floor_double(bb.maxZ); ++z)
+                {
+                    Block block = world.getBlockState(mutableBlockPos.set(x, y, z)).getBlock();
+                    BlockPos blockPos = new BlockPos(x, y, z);
+
+                    if (block.isAir(world, blockPos) && block.getSelectedBoundingBox(world, blockPos).intersectsWith(bb))
                     {
                         return blockPos;
                     }

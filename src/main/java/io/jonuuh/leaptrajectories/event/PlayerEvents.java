@@ -5,20 +5,35 @@ import io.jonuuh.leaptrajectories.util.Util;
 import io.jonuuh.leaptrajectories.util.Vec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class PlayerEvents
 {
     private final Minecraft mc;
+    private final KeyBinding toggleKey;
 
-    public PlayerEvents(Minecraft mc)
+    public PlayerEvents(KeyBinding toggleKey)
     {
-        this.mc = mc;
+        this.mc = Minecraft.getMinecraft();
+        this.toggleKey = toggleKey;
+    }
+
+    @SubscribeEvent
+    public void onKeyInput(InputEvent.KeyInputEvent event)
+    {
+//        if (toggleKey.isPressed())
+//        {
+//            Vec leapMotion = Util.getLeapMotion(mc.thePlayer);
+//            mc.thePlayer.setVelocity(leapMotion.x, leapMotion.y, leapMotion.z);
+//            Config.setLeaping(true);
+//        }
     }
 
     @SubscribeEvent
@@ -49,9 +64,9 @@ public class PlayerEvents
         }
     }
 
-    private Vec lastPreTickMotion = new Vec();
-    private int lastPreTickLevel = 0;
-    private int lastExpLevelDiff = 0;
+//    private Vec lastPreTickMotion = new Vec();
+//    private int lastPreTickLevel = 0;
+//    private int lastExpLevelDiff = 0;
 
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event)
@@ -63,29 +78,41 @@ public class PlayerEvents
 
         EntityPlayerSP player = mc.thePlayer;
 
-        if (lastExpLevelDiff != -100)
+        if (Util.usingLeapItem(player) && !Config.isLeaping())
         {
-            lastExpLevelDiff = player.experienceLevel - lastPreTickLevel;
+            Vec leapMotion = Util.getLeapMotion(mc.thePlayer);
+            mc.thePlayer.setVelocity(leapMotion.x, leapMotion.y, leapMotion.z);
+//            Config.setLeaping(true);
         }
+
+//        if (lastExpLevelDiff != -100)
+//        {
+//            lastExpLevelDiff = player.experienceLevel - lastPreTickLevel;
+//        }
 
         if (Config.isLeaping() && player.onGround)
         {
-            lastExpLevelDiff = 0;
+//            lastExpLevelDiff = 0;
             Config.setLeaping(false);
             Util.addChat(player, EnumChatFormatting.BLUE, "[LTJ] stopped leap: "
-                    + lastPreTickMotion + " " + player.experienceLevel + " " + event.phase + " " + player.onGround + " " + lastExpLevelDiff);
+                    /*+ lastPreTickMotion + " "*/ + player.experienceLevel + " " + event.phase + " " + player.onGround
+                    /*+ " " + lastExpLevelDiff*/);
         }
 
-        if (!Config.isLeaping() && !player.onGround && lastExpLevelDiff == -100 && Config.isArrowMode() && Util.usingLeapItem(player) && !player.isSneaking())
+        if (!Config.isLeaping() /*&& !player.onGround*/ /*&& lastExpLevelDiff == -100*/ && Config.isArrowMode() && Util.usingLeapItem(player) && !player.isSneaking())
         {
-            Config.setLeaping(true);
-            // TODO: grabbing leap motion like this won't work if player is already airborne before leaping
-            // TODO: try detecting a leap motion directly? (motion.dot(lookVec) = 1 && some threshold for minimum motion?)
-            Util.addChat(player, EnumChatFormatting.BLUE, "[LTJ] started leap: "
-                    + lastPreTickMotion + " " + player.experienceLevel + " " + event.phase + " " + player.onGround + " " + lastExpLevelDiff);
+            if (player.motionX != 0 || player.motionZ != 0)
+            {
+                Config.setLeaping(true);
+                // TODO: grabbing leap motion like this won't work if player is already airborne before leaping
+                // TODO: try detecting a leap motion directly? (motion.dot(lookVec) = 1 && some threshold for minimum motion?)
+                Util.addChat(player, EnumChatFormatting.BLUE, "[LTJ] started leap: "
+                        /*+ lastPreTickMotion + " "*/ + player.experienceLevel + " " + event.phase + " " + player.onGround
+                        /*+ " " + lastExpLevelDiff*/ + " " + new Vec(player.motionX, player.motionY, player.motionZ));
+            }
         }
 
-        lastPreTickMotion = new Vec(player.motionX, player.motionY, player.motionZ);
-        lastPreTickLevel = player.experienceLevel;
+//        lastPreTickMotion = new Vec(player.motionX, player.motionY, player.motionZ);
+//        lastPreTickLevel = player.experienceLevel;
     }
 }

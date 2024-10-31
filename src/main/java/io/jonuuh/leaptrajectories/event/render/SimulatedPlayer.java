@@ -3,6 +3,7 @@ package io.jonuuh.leaptrajectories.event.render;
 import io.jonuuh.leaptrajectories.util.Vec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.BlockPos;
 
 class SimulatedPlayer
@@ -10,7 +11,7 @@ class SimulatedPlayer
     private final Minecraft mc;
     private final EntityPlayerSP player;
     private final Vec pos;
-    private final Vec motion;
+    final Vec motion;
     private final float moveForward;
     private final float moveStrafe;
     private boolean onGround;
@@ -32,14 +33,15 @@ class SimulatedPlayer
     }
 
     /**
-     * EntityLivingBase line 1589 moveEntityWithHeading
+     * @see EntityLivingBase#moveEntityWithHeading(float, float)
      */
     void move()
     {
-        float xzFrict = (!onGround) ? 0.91F : mc.theWorld.getBlockState(new BlockPos(
+        // TODO ?
+        float xzFrict = /*(!onGround) ?*/ 0.91F/* : mc.theWorld.getBlockState(new BlockPos(
                 Math.floor(player.posX),
                 Math.floor(player.getEntityBoundingBox().minY) - 1,
-                Math.floor(player.posZ))).getBlock().slipperiness * 0.91F;
+                Math.floor(player.posZ))).getBlock().slipperiness * 0.91F*/;
 
         float friction = (!onGround) ? player.jumpMovementFactor : player.getAIMoveSpeed() * (0.16277136F / (xzFrict * xzFrict * xzFrict));
         float f = moveStrafe * moveStrafe + moveForward * moveForward;
@@ -51,8 +53,8 @@ class SimulatedPlayer
             double f1 = Math.sin(Math.toRadians(player.rotationYaw));
             double f2 = Math.cos(Math.toRadians(player.rotationYaw));
 
-            motion.x += (double) ((moveStrafe * f) * f2 - (moveForward * f) * f1);
-            motion.z += (double) ((moveForward * f) * f2 + (moveStrafe * f) * f1);
+            motion.x += (float) ((moveStrafe * f) * f2 - (moveForward * f) * f1);
+            motion.z += (float) ((moveForward * f) * f2 + (moveStrafe * f) * f1);
         }
 
         xzFrict = (!onGround) ? 0.91F : mc.theWorld.getBlockState(new BlockPos(
